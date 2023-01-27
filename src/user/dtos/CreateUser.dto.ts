@@ -4,7 +4,7 @@ import {
   IsEmail,
   IsNumberString,
   IsString,
-  IsDateString,
+  IsDateString
 } from 'class-validator';
 
 export class CreateUserDto {

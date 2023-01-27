@@ -1,15 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn
+} from 'typeorm';
+import { Ward } from './ward.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  user_id: number;
 
   @Column({ default: false })
-  isAdmin: boolean;
+  role_id: boolean;
 
   @Column({ unique: true })
-  identificationCard: string;
+  identification_card: string;
 
   @Column({ unique: true })
   email: string;
@@ -21,11 +28,26 @@ export class User {
   fullname: string;
 
   @Column()
-  birthday: string;
+  birthday: Date;
 
   @Column()
   gender: string;
 
   @Column()
-  wardId: string;
+  ward_id: string;
+
+  @Column({ type: 'timestamp' })
+  created_at: Date;
+
+  @Column({ type: 'timestamp' })
+  update_at: Date;
+
+  @Column({ type: 'timestamp' })
+  deleted_at: Date;
+
+  @ManyToOne(() => Ward, (ward) => ward.users, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'ward_id' })
+  ward: Ward;
 }

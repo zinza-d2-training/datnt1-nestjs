@@ -1,0 +1,99 @@
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey
+} from 'typeorm';
+
+export class user1674295055406 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // await queryRunner.createTable(
+    //   new Table({
+    //     name: 'user',
+    //     columns: [
+    //       {
+    //         name: 'user_id',
+    //         type: 'int',
+    //         isPrimary: true,
+    //         isGenerated: true,
+    //         generationStrategy: 'increment',
+    //       },
+    //       {
+    //         name: 'role_id',
+    //         type: 'int',
+    //         default: 0,
+    //       },
+    //       {
+    //         name: 'identification_card',
+    //         type: 'varchar(255)',
+    //       },
+    //       {
+    //         name: 'email',
+    //         type: 'varchar(255)',
+    //       },
+    //       {
+    //         name: 'password',
+    //         type: 'varchar(255)',
+    //       },
+    //       {
+    //         name: 'fullname',
+    //         type: 'varchar(255)',
+    //       },
+    //       {
+    //         name: 'birthday',
+    //         type: 'date',
+    //       },
+    //       {
+    //         name: 'gender',
+    //         type: 'varchar(255)',
+    //       },
+    //       {
+    //         name: 'ward_id',
+    //         type: 'int',
+    //       },
+    //       {
+    //         name: 'created_at',
+    //         type: 'timestamp',
+    //         default: 'now()',
+    //         isNullable: true,
+    //       },
+    //       {
+    //         name: 'update_at',
+    //         type: 'timestamp',
+    //         default: 'now()',
+    //         isNullable: true,
+    //       },
+    //       {
+    //         name: 'deleted_at',
+    //         type: 'timestamp',
+    //         default: 'now()',
+    //         isNullable: true,
+    //       },
+    //     ],
+    //   }),
+    //   true,
+    // );
+    // await queryRunner.createForeignKey(
+    //   'user',
+    //   new TableForeignKey({
+    //     columnNames: ['ward_id'],
+    //     referencedColumnNames: ['ward_id'],
+    //     referencedTableName: 'ward',
+    //     onDelete: 'CASCADE',
+    //     onUpdate: 'CASCADE',
+    //   }),
+    // );
+    // await queryRunner.createForeignKey(
+    //   'user',
+    //   new TableForeignKey({
+    //     columnNames: ['role_id'],
+    //     referencedColumnNames: ['role_id'],
+    //     referencedTableName: 'role',
+    //     onDelete: 'CASCADE',
+    //     onUpdate: 'CASCADE',
+    //   }),
+    // );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {}
+}

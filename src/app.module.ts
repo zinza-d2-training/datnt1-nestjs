@@ -4,25 +4,30 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './typeorm/entities/user.entity';
+import { DistrictModule } from './district/district.module';
+import { ProvinceModule } from './province/province.module';
 import { UserModule } from './user/user.module';
+import { WardModule } from './ward/ward.module';
+import { ConsoleModule } from '@squareboat/nest-console';
+
+import * as dotenv from 'dotenv';
+import { dataSourceOptions } from './typeorm/ormconfig';
+import { AdministrativeUnitModule } from './administrative_unit/administrative_unit.module';
+
+dotenv.config();
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DB,
-      entities: [User],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
+    WardModule,
+    DistrictModule,
+    ProvinceModule,
+    AdministrativeUnitModule,
+    ConsoleModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}

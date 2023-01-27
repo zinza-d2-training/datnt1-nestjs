@@ -6,7 +6,7 @@ import { CreateUserDto } from './dtos/CreateUser.dto';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>
   ) {}
 
   getUsers() {
@@ -14,7 +14,7 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneBy({ user_id: id });
   }
 
   async remove(id: number) {

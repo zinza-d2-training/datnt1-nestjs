@@ -6,11 +6,11 @@ describe('AdministrativeUnitController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AdministrativeUnitController]
+      controllers: [AdministrativeUnitController],
     }).compile();
 
     controller = module.get<AdministrativeUnitController>(
-      AdministrativeUnitController
+      AdministrativeUnitController,
     );
   });
 

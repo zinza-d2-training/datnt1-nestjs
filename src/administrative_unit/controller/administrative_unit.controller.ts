@@ -4,7 +4,7 @@ import { AdministrativeUnitService } from 'src/administrative_unit/service/admin
 @Controller('administrative-unit')
 export class AdministrativeUnitController {
   constructor(
-    @Inject('IMPORT_UNIT_ADMINISTRATIVE_SERVER')
-    private readonly administrativeUnitService: AdministrativeUnitService
+    @Inject('IMPORT_ADMINISTRATIVE_UNIT_SERVICE')
+    private readonly administrativeUnitService: AdministrativeUnitService,
   ) {}
 }

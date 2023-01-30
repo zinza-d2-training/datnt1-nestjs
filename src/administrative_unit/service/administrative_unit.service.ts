@@ -17,11 +17,11 @@ export class AdministrativeUnitService {
     @InjectRepository(District)
     private readonly districtRepository: Repository<District>,
     @InjectRepository(Province)
-    private readonly provinceRepository: Repository<Province>
+    private readonly provinceRepository: Repository<Province>,
   ) {}
 
   @Command('import', {
-    desc: 'Import data from excel file into mysql database'
+    desc: 'Import data from excel file into mysql database',
   })
   async importFile(_cli: ConsoleIO) {
     const provinces = [];
@@ -31,16 +31,16 @@ export class AdministrativeUnitService {
     _cli.info('Importing file into mysql database ... ');
 
     const administrativeUnitData = XLSX.readFile(
-      'src/utils/excels/Danh sách cấp xã ___18_01_2023.xls'
+      'src/utils/excels/Danh sách cấp xã ___18_01_2023.xls',
     ).Sheets;
 
     const administrativeUnits = XLSX.utils.sheet_to_json(
-      administrativeUnitData['Sheet1']
+      administrativeUnitData['Sheet1'],
     );
 
     for (const administrativeUnit of administrativeUnits) {
       const isExistListProvince: boolean = provinces.some(
-        (province) => province.name == administrativeUnit['Tỉnh / Thành Phố']
+        (province) => province.name == administrativeUnit['Tỉnh / Thành Phố'],
       );
       if (!isExistListProvince) {
         provinces.push({ name: administrativeUnit['Tỉnh / Thành Phố'] });
@@ -54,12 +54,12 @@ export class AdministrativeUnitService {
       for (const provinceFromDB of listProvinceFromDB) {
         if (provinceFromDB.name === administrativeUnit['Tỉnh / Thành Phố']) {
           const isExistedDistrict = districts.some(
-            (district) => district.name === administrativeUnit['Quận Huyện']
+            (district) => district.name === administrativeUnit['Quận Huyện'],
           );
           if (!isExistedDistrict) {
             districts.push({
               name: administrativeUnit['Quận Huyện'],
-              province_id: provinceFromDB.province_id
+              province_id: provinceFromDB.province_id,
             });
           }
         }
@@ -73,7 +73,7 @@ export class AdministrativeUnitService {
         if (district.name === administrativeUnit['Quận Huyện']) {
           wards.push({
             name: administrativeUnit['Tên'] || 'Undefined data',
-            district_id: district.district_id
+            district_id: district.district_id,
           });
         }
       }

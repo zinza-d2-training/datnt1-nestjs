@@ -1,19 +1,17 @@
-import { IsIdentityCardLength } from 'src/custom_validation_decorators/IsIdentityCardLength';
 import {
-  MinLength,
-  MaxLength,
-  IsEmail,
-  IsNumberString,
-  IsString,
   IsDateString,
+  IsEmail,
   IsNotEmpty,
+  IsNumber,
+  Min,
+  MinLength,
 } from 'class-validator';
+import { IsIdentityCardLength } from '../../custom_validation_decorators/IsIdentityCardLength';
 
-export class CreateUserDto {
+export class LoginUserDto {
   @IsNotEmpty()
-  @IsNumberString()
   @IsIdentityCardLength()
-  identification_card: string;
+  identity_card: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -24,7 +22,6 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @IsString()
   fullname: string;
 
   @IsNotEmpty()
@@ -32,10 +29,10 @@ export class CreateUserDto {
   birthday: string;
 
   @IsNotEmpty()
-  @IsString()
   gender: string;
 
   @IsNotEmpty()
-  @IsNumberString()
+  @IsNumber()
+  @Min(1)
   ward_id: string;
 }

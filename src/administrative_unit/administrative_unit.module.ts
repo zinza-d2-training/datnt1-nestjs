@@ -11,9 +11,9 @@ import { AdministrativeUnitService } from './service/administrative_unit.service
   controllers: [AdministrativeUnitController],
   providers: [
     {
-      provide: 'IMPORT_UNIT_ADMINISTRATIVE_SERVER',
-      useClass: AdministrativeUnitService
-    }
-  ]
+      provide: 'IMPORT_ADMINISTRATIVE_UNIT_SERVICE',
+      useClass: AdministrativeUnitService,
+    },
+  ],
 })
 export class AdministrativeUnitModule {}

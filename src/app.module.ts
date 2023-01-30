@@ -1,33 +1,27 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConsoleModule } from '@squareboat/nest-console';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DistrictModule } from './district/district.module';
-import { ProvinceModule } from './province/province.module';
 import { UserModule } from './user/user.module';
-import { WardModule } from './ward/ward.module';
-import { ConsoleModule } from '@squareboat/nest-console';
-
-import * as dotenv from 'dotenv';
 import { dataSourceOptions } from './typeorm/ormconfig';
 import { AdministrativeUnitModule } from './administrative_unit/administrative_unit.module';
-
-dotenv.config();
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
-    WardModule,
-    DistrictModule,
-    ProvinceModule,
     AdministrativeUnitModule,
-    ConsoleModule
+    ConsoleModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService],
 })
 export class AppModule {}

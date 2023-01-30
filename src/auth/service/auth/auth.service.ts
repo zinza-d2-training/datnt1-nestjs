@@ -1,13 +1,11 @@
-import { LoggedInUser } from '../../types/logged-in-user.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { User } from 'src/typeorm/entities/user.entity';
 import { comparePassword, encodePassword } from 'src/auth/bcrypt';
-import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { RegisterUserDto } from 'src/auth/dto/register-user.dto';
+import { User } from 'src/typeorm/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,13 +20,7 @@ export class AuthService {
       where: { email },
     });
 
-    // if (user && comparePassword(password, user.password)) {
-    //   const { password, ...userInfo } = user;
-    //   return userInfo;
-    // }
-    if (user && password === user.password) {
-      console.log('equal password');
-
+    if (user && comparePassword(password, user.password)) {
       const { password, ...userInfo } = user;
       return userInfo;
     }
@@ -43,22 +35,30 @@ export class AuthService {
       role: user.role,
     };
     const accessToken = await this.jwtService.sign(payload);
-    console.log(accessToken);
     return {
+      ...user,
       accessToken,
     };
   }
 
   async register(registerUserDto: RegisterUserDto) {
     const hashedPassword = encodePassword(registerUserDto.password);
-    await this.userRepository.insert({
-      ...registerUserDto,
-      password: hashedPassword,
-    });
-    return {
-      status: 201,
-      message: 'User created successfully',
-    };
+    try {
+      await this.userRepository.insert({
+        ...registerUserDto,
+        password: hashedPassword,
+      });
+      return {
+        status: 201,
+        message: 'User created successfully',
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: 'Internal server error',
+        error: error,
+      };
+    }
   }
 
   async logout() {
@@ -69,6 +69,9 @@ export class AuthService {
   }
 
   async getUserById(id: number) {
-    return await this.userRepository.findOne({ where: { user_id: id } });
+    const { password, ...userInfo } = await this.userRepository.findOne({
+      where: { user_id: id },
+    });
+    return userInfo;
   }
 }

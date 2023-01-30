@@ -1,18 +1,18 @@
-import { JwtAuthGuard } from './../../guards/jwt-auth.guard';
-import { AuthService } from 'src/auth/service/auth/auth.service';
 import {
-  Controller,
-  Post,
-  Get,
-  UseGuards,
-  Request,
   Body,
+  Controller,
+  Get,
   Param,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthService } from 'src/auth/service/auth/auth.service';
+import { JwtAuthGuard } from './../../guards/jwt-auth.guard';
 
-import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
-import { RegisterUserDto } from 'src/auth/dto/register-user.dto';
 import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
+import { RegisterUserDto } from 'src/auth/dto/register-user.dto';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +37,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('user/:id')
   async getUserById(@Param('id', ParseIntPipe) id: number) {
-    const { password, ...userInfo } = await this.authService.getUserById(id);
-    return userInfo;
+    return await this.authService.getUserById(id);
   }
 }

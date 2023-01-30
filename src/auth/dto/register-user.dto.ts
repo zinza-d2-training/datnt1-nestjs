@@ -8,10 +8,13 @@ import {
 } from 'class-validator';
 import { IsIdentityCardLength } from '../../custom_validation_decorators/IsIdentityCardLength';
 
-export class LoginUserDto {
+export class RegisterUserDto {
   @IsNotEmpty()
-  @IsIdentityCardLength()
-  identity_card: string;
+  @IsIdentityCardLength({
+    message:
+      'identification_card must be a number string with length equal to 9 or 12 characters',
+  })
+  identification_card: string;
 
   @IsNotEmpty()
   @IsEmail()

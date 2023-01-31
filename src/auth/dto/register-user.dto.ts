@@ -6,7 +6,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { IsIdentityCardLength } from '../../custom_validation_decorators/IsIdentityCardLength';
+import { IsIdentityCardLength } from 'custom_validation_decorators/IsIdentityCardLength';
 
 export class RegisterUserDto {
   @IsNotEmpty()

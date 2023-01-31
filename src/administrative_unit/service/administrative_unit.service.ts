@@ -5,9 +5,9 @@ import { Command } from '@squareboat/nest-console';
 import { ConsoleIO } from '@squareboat/nest-console/dist/consoleIO';
 import * as XLSX from 'xlsx';
 
-import { Province } from 'src/typeorm/entities/province.entity';
-import { District } from 'src/typeorm/entities/district.entity';
-import { Ward } from 'src/typeorm/entities/ward.entity';
+import { Province } from 'typeorm/entities/province.entity';
+import { District } from 'typeorm/entities/district.entity';
+import { Ward } from 'typeorm/entities/ward.entity';
 
 @Injectable()
 export class AdministrativeUnitService {

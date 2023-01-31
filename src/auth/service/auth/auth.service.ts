@@ -1,11 +1,15 @@
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { comparePassword, encodePassword } from 'src/auth/bcrypt';
-import { RegisterUserDto } from 'src/auth/dto/register-user.dto';
-import { User } from 'src/typeorm/entities/user.entity';
+import { comparePassword, encodePassword } from 'auth/bcrypt';
+import { RegisterUserDto } from 'auth/dto/register-user.dto';
+import { UserInfo } from 'auth/types/user-info.interface';
+import { User } from 'typeorm/entities/user.entity';
+import { HttpStatus } from '@nestjs/common';
+import { Role } from 'auth/types/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -22,19 +26,21 @@ export class AuthService {
 
     if (user && comparePassword(password, user.password)) {
       const { password, ...userInfo } = user;
+
       return userInfo;
     }
 
     return null;
   }
 
-  async login(user: any) {
+  async login(user: UserInfo) {
     const payload = {
       email: user.email,
       user_id: user.user_id,
-      role: user.role,
+      role_id: user.role_id,
     };
     const accessToken = await this.jwtService.sign(payload);
+
     return {
       ...user,
       accessToken,
@@ -48,8 +54,9 @@ export class AuthService {
         ...registerUserDto,
         password: hashedPassword,
       });
+
       return {
-        status: 201,
+        status: HttpStatus.CREATED,
         message: 'User created successfully',
       };
     } catch (error) {
@@ -63,15 +70,24 @@ export class AuthService {
 
   async logout() {
     return {
-      status: '200',
+      status: HttpStatus.OK,
       message: 'Log out successful',
     };
   }
 
-  async getUserById(id: number) {
-    const { password, ...userInfo } = await this.userRepository.findOne({
-      where: { user_id: id },
-    });
-    return userInfo;
+  async getUserById(id: number, user: LoggedInUser) {
+    if (user.role_id === Role.ADMIN || user.user_id === id) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...userInfo } = await this.userRepository.findOne({
+        where: { user_id: id },
+      });
+
+      return userInfo;
+    }
+
+    return {
+      status: HttpStatus.FORBIDDEN,
+      message: 'Forbidden',
+    };
   }
 }

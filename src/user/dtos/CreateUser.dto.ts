@@ -1,13 +1,12 @@
-import { IsIdentityCardLength } from 'src/custom_validation_decorators/IsIdentityCardLength';
 import {
-  MinLength,
-  MaxLength,
+  IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsNumberString,
   IsString,
-  IsDateString,
-  IsNotEmpty,
+  MinLength,
 } from 'class-validator';
+import { IsIdentityCardLength } from 'custom_validation_decorators/IsIdentityCardLength';
 
 export class CreateUserDto {
   @IsNotEmpty()

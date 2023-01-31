@@ -1,9 +1,9 @@
 import {
+  registerDecorator,
+  ValidationArguments,
+  ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
-  registerDecorator,
-  ValidationOptions,
 } from 'class-validator';
 
 @ValidatorConstraint({ async: true })
@@ -11,7 +11,7 @@ export class IsIdentityCardLengthConstraint
   implements ValidatorConstraintInterface
 {
   validate(text: string, args: ValidationArguments) {
-    return text.length == 9 || text.length == 12;
+    return text.length === 9 || text.length === 12;
   }
 }
 

@@ -1,5 +1,5 @@
 import { Controller, Inject } from '@nestjs/common';
-import { AdministrativeUnitService } from 'src/administrative_unit/service/administrative_unit.service';
+import { AdministrativeUnitService } from 'administrative_unit/service/administrative_unit.service';
 
 @Controller('administrative-unit')
 export class AdministrativeUnitController {

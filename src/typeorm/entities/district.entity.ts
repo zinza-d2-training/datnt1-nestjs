@@ -4,7 +4,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Province } from './province.entity';
 import { Ward } from './ward.entity';
@@ -30,7 +30,7 @@ export class District {
   delete_at: Date;
 
   @ManyToOne(() => Province, (province) => province.districts, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'province_id' })
   province: Province;

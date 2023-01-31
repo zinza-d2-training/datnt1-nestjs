@@ -1,13 +1,13 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class province1674294817269 implements MigrationInterface {
+export class role1675062926458 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'province',
+        name: 'role',
         columns: [
           {
-            name: 'province_id',
+            name: 'role_id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,
@@ -43,6 +43,6 @@ export class province1674294817269 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('province');
+    await queryRunner.dropTable('role');
   }
 }

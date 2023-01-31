@@ -9,7 +9,15 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
+    "paths": {
+      "administrative_unit/*": ["administrative_unit/*"],
+      "auth/*": ["auth/*"],
+      "custom_validation_decorators/*": ["custom_validation_decorators/*"],
+      "typeorm/*": ["typeorm/*"],
+      "user/*": ["user/*"],
+      "excels/*": ["excels/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -17,5 +25,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": [
+    "src/**/*",
+    "index.d.ts" // declaration file path
+  ]
 }

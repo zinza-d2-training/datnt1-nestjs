@@ -2,7 +2,7 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableForeignKey
+  TableForeignKey,
 } from 'typeorm';
 
 export class ward1674295046743 implements MigrationInterface {
@@ -16,38 +16,38 @@ export class ward1674295046743 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment'
+            generationStrategy: 'increment',
           },
           {
             name: 'name',
             type: 'varchar',
-            length: '255'
+            length: '255',
           },
           {
             name: 'district_id',
-            type: 'int'
+            type: 'int',
           },
           {
             name: 'create_at',
             type: 'timestamp',
             isNullable: true,
-            default: 'now()'
+            default: 'now()',
           },
           {
             name: 'update_at',
             type: 'timestamp',
             isNullable: true,
-            default: 'now()'
+            default: 'now()',
           },
           {
             name: 'delete_at',
             type: 'timestamp',
             isNullable: true,
-            default: 'now()'
-          }
-        ]
+            default: 'now()',
+          },
+        ],
       }),
-      true
+      true,
     );
 
     await queryRunner.createForeignKey(
@@ -56,8 +56,8 @@ export class ward1674295046743 implements MigrationInterface {
         columnNames: ['district_id'],
         referencedColumnNames: ['district_id'],
         referencedTableName: 'district',
-        onDelete: 'CASCADE'
-      })
+        onDelete: 'CASCADE',
+      }),
     );
   }
 

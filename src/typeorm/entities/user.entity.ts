@@ -3,8 +3,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
 } from 'typeorm';
+import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 
 @Entity('user')
@@ -12,8 +13,8 @@ export class User {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @Column({ default: false })
-  role_id: boolean;
+  @Column({ default: 0 })
+  role_id: number;
 
   @Column({ unique: true })
   identification_card: string;
@@ -46,8 +47,14 @@ export class User {
   deleted_at: Date;
 
   @ManyToOne(() => Ward, (ward) => ward.users, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'ward_id' })
   ward: Ward;
+
+  @ManyToOne(() => Role, (role) => role.users, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 }

@@ -2,16 +2,18 @@ import {
   IsDateString,
   IsEmail,
   IsNotEmpty,
-  IsNumberString,
-  IsString,
+  IsNumber,
+  Min,
   MinLength,
 } from 'class-validator';
 import { IsIdentityCardLength } from 'custom_validation_decorators/IsIdentityCardLength';
 
-export class CreateUserDto {
+export class RegisterUserDto {
   @IsNotEmpty()
-  @IsNumberString()
-  @IsIdentityCardLength()
+  @IsIdentityCardLength({
+    message:
+      'identification_card must be a number string with length equal to 9 or 12 characters',
+  })
   identification_card: string;
 
   @IsNotEmpty()
@@ -23,7 +25,6 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @IsString()
   fullname: string;
 
   @IsNotEmpty()
@@ -31,10 +32,10 @@ export class CreateUserDto {
   birthday: string;
 
   @IsNotEmpty()
-  @IsString()
   gender: string;
 
   @IsNotEmpty()
-  @IsNumberString()
+  @IsNumber()
+  @Min(1)
   ward_id: string;
 }

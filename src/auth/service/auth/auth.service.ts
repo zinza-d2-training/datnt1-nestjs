@@ -1,15 +1,14 @@
-import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Repository } from 'typeorm';
 
+import { HttpStatus, InternalServerErrorException } from '@nestjs/common';
 import { comparePassword, encodePassword } from 'auth/bcrypt';
 import { RegisterUserDto } from 'auth/dto/register-user.dto';
 import { UserInfo } from 'auth/types/user-info.interface';
 import { User } from 'typeorm/entities/user.entity';
-import { HttpStatus } from '@nestjs/common';
-import { Role } from 'auth/types/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -75,19 +74,18 @@ export class AuthService {
     };
   }
 
-  async getUserById(id: number, user: LoggedInUser) {
-    if (user.role_id === Role.ADMIN || user.user_id === id) {
+  async getUserInfo(user: LoggedInUser) {
+    try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...userInfo } = await this.userRepository.findOne({
-        where: { user_id: id },
+        where: { user_id: user.user_id },
       });
 
       return userInfo;
+    } catch (error) {
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
+      });
     }
-
-    return {
-      status: HttpStatus.FORBIDDEN,
-      message: 'Forbidden',
-    };
   }
 }

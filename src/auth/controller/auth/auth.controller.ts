@@ -35,8 +35,10 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('user/:id')
-  async getUserById(@Request() request, @Param('id', ParseIntPipe) id: number) {
-    return await this.authService.getUserById(id, request.user);
+  @Get('user-info')
+  async getUserInfo(@Request() request) {
+    console.log(request.user);
+
+    return await this.authService.getUserInfo(request.user);
   }
 }

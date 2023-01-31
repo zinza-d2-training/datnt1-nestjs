@@ -10,6 +10,8 @@ import { UserInfo } from 'auth/types/user-info.interface';
 import { User } from 'typeorm/entities/user.entity';
 import { HttpStatus } from '@nestjs/common';
 import { Role } from 'auth/types/role.enum';
+import { HttpException } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -75,19 +77,18 @@ export class AuthService {
     };
   }
 
-  async getUserById(id: number, user: LoggedInUser) {
-    if (user.role_id === Role.ADMIN || user.user_id === id) {
+  async getUserInfo(user: LoggedInUser) {
+    try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...userInfo } = await this.userRepository.findOne({
-        where: { user_id: id },
+        where: { user_id: user.user_id },
       });
 
       return userInfo;
+    } catch (error) {
+      throw new InternalServerErrorException('Something bad happened', {
+        cause: new Error(error),
+      });
     }
-
-    return {
-      status: HttpStatus.FORBIDDEN,
-      message: 'Forbidden',
-    };
   }
 }

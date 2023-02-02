@@ -35,8 +35,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('user-info')
   async getUserInfo(@Request() request) {
-    console.log(request.user);
-
     return await this.authService.getUserInfo(request.user);
   }
 }

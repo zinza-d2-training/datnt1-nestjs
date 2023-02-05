@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Command } from '@squareboat/nest-console';
 import { ConsoleIO } from '@squareboat/nest-console/dist/consoleIO';
+import { Repository } from 'typeorm';
 import * as XLSX from 'xlsx';
 
-import { Province } from 'typeorm/entities/province.entity';
 import { District } from 'typeorm/entities/district.entity';
+import { Province } from 'typeorm/entities/province.entity';
 import { Ward } from 'typeorm/entities/ward.entity';
 
 @Injectable()
@@ -79,5 +84,81 @@ export class AdministrativeUnitService {
       }
     }
     await this.wardRepository.insert(wards);
+  }
+
+  async getAllProvinces() {
+    try {
+      const provinces = await this.provinceRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
+
+      return provinces;
+    } catch (err) {
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
+      });
+    }
+  }
+
+  async getDistrictsByprovince_id(id: number) {
+    try {
+      const districts = await this.districtRepository.find({
+        where: { province_id: id },
+        order: {
+          name: 'ASC',
+        },
+      });
+
+      return districts;
+    } catch (error) {
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
+      });
+    }
+  }
+
+  async getAllDistricts() {
+    const districts = await this.districtRepository.find({
+      order: {
+        name: 'ASC',
+      },
+    });
+
+    return districts;
+  }
+
+  async getWardsBydistrict_id(id: number) {
+    try {
+      const wards = await this.wardRepository.find({
+        where: { district_id: id },
+        order: {
+          name: 'ASC',
+        },
+      });
+
+      return wards;
+    } catch (error) {
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
+      });
+    }
+  }
+
+  async getAllWards() {
+    try {
+      const wards = await this.wardRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
+
+      return wards;
+    } catch (error) {
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
+      });
+    }
   }
 }

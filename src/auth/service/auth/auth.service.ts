@@ -46,23 +46,27 @@ export class AuthService {
   }
 
   async register(registerUserDto: RegisterUserDto) {
-    const hashedPassword = encodePassword(registerUserDto.password);
     try {
-      await this.userRepository.insert({
-        ...registerUserDto,
-        password: hashedPassword,
-      });
+      const { email } = registerUserDto;
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) {
+        const hashedPassword = encodePassword(registerUserDto.password);
+        await this.userRepository.insert({
+          ...registerUserDto,
+          password: hashedPassword,
+        });
+      } else {
+        throw new Error();
+      }
 
       return {
         status: HttpStatus.CREATED,
         message: 'User created successfully',
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: 'Internal server error',
-        error: error,
-      };
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(error),
+      });
     }
   }
 

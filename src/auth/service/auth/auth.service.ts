@@ -1,17 +1,14 @@
-import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Repository } from 'typeorm';
 
+import { HttpStatus, InternalServerErrorException } from '@nestjs/common';
 import { comparePassword, encodePassword } from 'auth/bcrypt';
 import { RegisterUserDto } from 'auth/dto/register-user.dto';
 import { UserInfo } from 'auth/types/user-info.interface';
 import { User } from 'typeorm/entities/user.entity';
-import { HttpStatus } from '@nestjs/common';
-import { Role } from 'auth/types/role.enum';
-import { HttpException } from '@nestjs/common';
-import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -41,32 +38,35 @@ export class AuthService {
       user_id: user.user_id,
       role_id: user.role_id,
     };
-    const accessToken = await this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload);
 
     return {
-      ...user,
       accessToken,
     };
   }
 
   async register(registerUserDto: RegisterUserDto) {
-    const hashedPassword = encodePassword(registerUserDto.password);
     try {
-      await this.userRepository.insert({
-        ...registerUserDto,
-        password: hashedPassword,
-      });
+      const { email } = registerUserDto;
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) {
+        const hashedPassword = encodePassword(registerUserDto.password);
+        await this.userRepository.insert({
+          ...registerUserDto,
+          password: hashedPassword,
+        });
+      } else {
+        throw new Error();
+      }
 
       return {
         status: HttpStatus.CREATED,
         message: 'User created successfully',
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: 'Internal server error',
-        error: error,
-      };
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(error),
+      });
     }
   }
 
@@ -86,8 +86,8 @@ export class AuthService {
 
       return userInfo;
     } catch (error) {
-      throw new InternalServerErrorException('Something bad happened', {
-        cause: new Error(error),
+      throw new InternalServerErrorException('Internal Server Error', {
+        cause: new Error(),
       });
     }
   }

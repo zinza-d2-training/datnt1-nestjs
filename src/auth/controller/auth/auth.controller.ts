@@ -2,15 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from 'auth/service/auth/auth.service';
 import { JwtAuthGuard } from 'auth/guards/jwt-auth.guard';
+import { AuthService } from 'auth/service/auth/auth.service';
 
-import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
 import { RegisterUserDto } from 'auth/dto/register-user.dto';
 import { LocalAuthGuard } from 'auth/guards/local-auth.guard';
 

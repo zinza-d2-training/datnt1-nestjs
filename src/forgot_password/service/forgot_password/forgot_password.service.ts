@@ -1,13 +1,12 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from './../../../user/user.service';
-import { JwtService } from '@nestjs/jwt';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { UserEmailDto } from 'forgot_password/dto/user-email.dto';
-import { User } from 'typeorm/entities/user.entity';
-import { Repository } from 'typeorm';
-import { encodePassword } from 'auth/bcrypt';
+import { Injectable } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common/exceptions';
+import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { encodePassword } from 'auth/bcrypt';
+import { UserEmailDto } from 'forgot_password/dto/user-email.dto';
+import { Repository } from 'typeorm';
+import { User } from 'typeorm/entities/user.entity';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -34,13 +33,13 @@ export class ForgotPasswordService {
         },
       );
 
-      const url = `${process.env.RESET_PASSWORD_API}${token}`;
+      const url = `${process.env.CLIENT_BASE_URL}/confirm-reset-password?token=${token}`;
 
       await this.mailerService.sendMail({
         from: process.env.MAIL_FROM,
         to: user.email,
         subject: 'Welcome to App! Confirm your Email',
-        html: `Follow <a href=${url}>here</a> to reset your password`,
+        html: `Follow <a href=${url}>here</a> to confirm reset your password`,
       });
 
       return {
@@ -69,6 +68,13 @@ export class ForgotPasswordService {
             reset_password_token: null,
           },
         );
+
+        await this.mailerService.sendMail({
+          from: process.env.MAIL_FROM,
+          to: user.email,
+          subject: 'Confirm reset password successfully',
+          text: `New reset password  is: ${newPassword}`,
+        });
 
         return {
           message: `New password reset is: ${newPassword}`,

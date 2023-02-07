@@ -25,6 +25,11 @@ export class User {
   @Column()
   password: string;
 
+  @Column({
+    nullable: true,
+  })
+  reset_password_token: string;
+
   @Column()
   fullname: string;
 

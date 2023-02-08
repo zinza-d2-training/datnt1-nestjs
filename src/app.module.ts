@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { dataSourceOptions } from './typeorm/ormconfig';
 import { AdministrativeUnitModule } from './administrative_unit/administrative_unit.module';
 import { AuthModule } from './auth/auth.module';
+import { ForgotPasswordModule } from './forgot_password/forgot_password.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     AdministrativeUnitModule,
     ConsoleModule,
     AuthModule,
+    ForgotPasswordModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -39,6 +39,11 @@ export class user1675065201922 implements MigrationInterface {
             length: '255',
           },
           {
+            name: 'reset_password_token',
+            type: 'varchar',
+            length: '255',
+          },
+          {
             name: 'fullname',
             type: 'varchar',
             length: '255',

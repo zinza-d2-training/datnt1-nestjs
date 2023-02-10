@@ -10,6 +10,7 @@ import { dataSourceOptions } from './typeorm/ormconfig';
 import { AdministrativeUnitModule } from './administrative_unit/administrative_unit.module';
 import { AuthModule } from './auth/auth.module';
 import { ForgotPasswordModule } from './forgot_password/forgot_password.module';
+import { VaccinationSiteModule } from './vaccination_site/vaccination_site.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ForgotPasswordModule } from './forgot_password/forgot_password.module';
     ConsoleModule,
     AuthModule,
     ForgotPasswordModule,
+    VaccinationSiteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

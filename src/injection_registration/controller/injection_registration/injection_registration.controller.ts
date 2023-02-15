@@ -1,7 +1,8 @@
 import {
-  UpdateInjectionRegistrationByUserDto,
   UpdateInjectionRegistrationByAdminDto,
-} from './../../dto/update-injection-registration.dto';
+  UpdateInjectionRegistrationByUserDto,
+} from 'injection_registration/dto/update-injection-registration.dto';
+
 import {
   Controller,
   UseGuards,

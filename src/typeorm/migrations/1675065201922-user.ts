@@ -29,6 +29,12 @@ export class user1675065201922 implements MigrationInterface {
             length: '255',
           },
           {
+            name: 'health_insurance_number',
+            type: 'varchar',
+            length: '255',
+            isNullable: true,
+          },
+          {
             name: 'email',
             type: 'varchar',
             length: '255',

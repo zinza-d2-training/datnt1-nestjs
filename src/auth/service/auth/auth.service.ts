@@ -80,9 +80,24 @@ export class AuthService {
   async getUserInfo(user: LoggedInUser) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userInfo } = await this.userRepository.findOne({
-        where: { user_id: user.user_id },
-      });
+      const { password, reset_password_token, ...others } =
+        await this.userRepository.findOne({
+          where: { user_id: user.user_id },
+          relations: { ward: { district: { province: true } } },
+        });
+
+      const userInfo = {
+        role_id: others.role_id,
+        identification_card: others.identification_card,
+        health_insurance_number: others.health_insurance_number,
+        email: others.email,
+        fullname: others.fullname,
+        birthday: others.birthday,
+        gender: others.gender,
+        ward_name: others.ward.name,
+        district_name: others.ward.district.name,
+        province_name: others.ward.district.province.name,
+      };
 
       return userInfo;
     } catch (error) {

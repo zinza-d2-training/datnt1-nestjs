@@ -3,8 +3,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { InjectionRegistration } from './injection_registration.entity';
 import { Ward } from './ward.entity';
 
 @Entity()
@@ -41,4 +44,10 @@ export class VaccinationSite {
   })
   @JoinColumn({ name: 'ward_id' })
   ward: Ward;
+
+  @OneToMany(
+    () => InjectionRegistration,
+    (injection_registration) => injection_registration.vaccination_site,
+  )
+  injection_registrations: InjectionRegistration[];
 }

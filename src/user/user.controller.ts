@@ -7,8 +7,16 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
+
+import { Roles } from 'auth/custom_decorators/role.decorator';
+import { RolesGuard } from 'auth/guards/roles.guard';
+import { Role } from 'auth/types/role.enum';
+import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -30,12 +38,11 @@ export class UserController {
     return this.userService.addOne(createUserDto);
   }
 
-  @Put(':id')
-  updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() createUserDto: CreateUserDto,
-  ) {
-    return this.userService.updateUser(id, createUserDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
+  @Put()
+  updateUser(@Request() request, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(request.user, updateUserDto);
   }
 
   @Delete(':id')

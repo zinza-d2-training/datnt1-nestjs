@@ -19,12 +19,6 @@ export class injectionRegistration1676051116269 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'health_insurance_number',
-            type: 'varchar',
-            length: '255',
-            isNullable: true,
-          },
-          {
             name: 'occupation',
             type: 'varchar',
             length: '255',

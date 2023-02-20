@@ -21,10 +21,10 @@ export class InjectionRegistration {
   @Column()
   user_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   vaccination_site_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   vaccine_id: number;
 
   @Column()

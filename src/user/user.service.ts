@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InternalServerErrorException } from '@nestjs/common/exceptions';
+import {
+  Injectable,
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { encodePassword } from 'auth/bcrypt';
 import { Repository } from 'typeorm';
@@ -32,19 +35,15 @@ export class UserService {
   }
 
   async updateUser(user, updateUserDto: UpdateUserDto) {
-    console.log('email' in updateUserDto);
     if ('email' in updateUserDto) {
-      throw new InternalServerErrorException();
+      throw new UnauthorizedException();
     }
 
     if ('password' in updateUserDto) {
-      const { password, ...others } = updateUserDto;
+      const { password } = updateUserDto;
       const hashedPassword = encodePassword(password);
 
-      return await this.userRepository.update(user?.user_id, {
-        password: hashedPassword,
-        ...others,
-      });
+      updateUserDto.password = hashedPassword;
     }
 
     return await this.userRepository.update(user?.user_id, updateUserDto);

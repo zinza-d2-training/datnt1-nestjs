@@ -4,26 +4,26 @@ import {
 } from 'injection_registration/dto/update-injection-registration.dto';
 
 import {
+  Body,
   Controller,
-  UseGuards,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
-  Body,
-  Request,
-  Query,
   Post,
   Put,
-  Delete,
+  Query,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 
-import { CreateInjectionRegistrationDto } from 'injection_registration/dto/create-injection-registration.dto';
-import { InjectionRegistrationService } from 'injection_registration/service/injection_registration/injection_registration.service';
+import { Roles } from 'auth/custom_decorators/role.decorator';
 import { JwtAuthGuard } from 'auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'auth/guards/roles.guard';
-import { Roles } from 'auth/custom_decorators/role.decorator';
 import { Role } from 'auth/types/role.enum';
+import { CreateInjectionRegistrationDto } from 'injection_registration/dto/create-injection-registration.dto';
 import { RegisterSearchFilterDto } from 'injection_registration/dto/register-search-filter.dto';
+import { InjectionRegistrationService } from 'injection_registration/service/injection_registration/injection_registration.service';
 
 @Controller('injection-registration')
 export class InjectionRegistrationController {
@@ -45,7 +45,7 @@ export class InjectionRegistrationController {
     return await this.injectionRegistrationService.findByUserId(request.user);
   }
 
-  @Get('admin/:id')
+  @Get(':id/view-detail-by-admin')
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async findByInjectionRegistrationId(@Param('id', ParseIntPipe) id: number) {
@@ -67,21 +67,23 @@ export class InjectionRegistrationController {
     );
   }
 
-  @Put('user/:id')
+  @Put(':id/by-user')
   @Roles(Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async updateInjectionRegistrationByUser(
+    @Request() request,
     @Param('id', ParseIntPipe) id: number,
     @Body()
     updateInjectionRegistrationDto: UpdateInjectionRegistrationByUserDto,
   ) {
     return await this.injectionRegistrationService.updateInjectionRegistrationByUser(
+      request.user,
       id,
       updateInjectionRegistrationDto,
     );
   }
 
-  @Put('admin/:id')
+  @Put(':id')
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async updateInjectionRegistrationByAdmin(

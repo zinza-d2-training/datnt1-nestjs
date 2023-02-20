@@ -41,8 +41,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Put()
-  updateUser(@Request() request, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser(request.user, updateUserDto);
+  async updateUser(@Request() request, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser(request.user, updateUserDto);
   }
 
   @Delete(':id')

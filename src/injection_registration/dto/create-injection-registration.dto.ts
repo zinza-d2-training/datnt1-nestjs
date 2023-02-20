@@ -12,10 +12,6 @@ import { InjectionSession } from 'injection_registration/types/injection-session
 
 export class CreateInjectionRegistrationDto {
   @IsOptional()
-  @IsNumberString()
-  health_insurance_number: string | null;
-
-  @IsOptional()
   @IsString()
   occupation: string;
 

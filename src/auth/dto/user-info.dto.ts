@@ -29,9 +29,9 @@ export class UserInfoDto {
       fullname: user?.fullname,
       birthday: user?.birthday,
       gender: user?.gender,
-      ward_name: user?.ward.name,
-      district_name: user?.ward.district.name,
-      province_name: user?.ward.district.province.name,
+      ward_name: user?.ward?.name,
+      district_name: user?.ward?.district?.name,
+      province_name: user?.ward?.district?.province?.name,
     });
   }
 

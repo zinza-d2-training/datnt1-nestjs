@@ -23,11 +23,15 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @Get()
   getUsers() {
     return this.userService.getUsers();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles()
   @Get(':id')
   getOneUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(id);
@@ -43,6 +47,16 @@ export class UserController {
   @Put()
   async updateUser(@Request() request, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateUser(request.user, updateUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Put(':id')
+  async updateByUserId(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.updateByUserId(request.user, updateUserDto);
   }
 
   @Delete(':id')

@@ -36,9 +36,9 @@ export class UserService {
   }
 
   async updateUser(user, updateUserDto: UpdateUserDto) {
-    if ('email' in updateUserDto) {
-      throw new UnauthorizedException();
-    }
+    // if ('email' in updateUserDto) {
+    //   throw new UnauthorizedException();
+    // }
 
     if ('password' in updateUserDto) {
       const { password } = updateUserDto;

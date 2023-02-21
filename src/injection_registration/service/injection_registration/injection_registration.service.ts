@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { HttpException } from '@nestjs/common/';
 import { HttpStatus } from '@nestjs/common/enums';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoggedInUser } from './../../../auth/types/logged-in-user.interface';
 
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { CreateInjectionRegistrationDto } from 'injection_registration/dto/create-injection-registration.dto';
 import { RegisterInfoDto } from 'injection_registration/dto/register-info.dto';
 import { RegisterResultDto } from 'injection_registration/dto/register-result.dto';
@@ -46,20 +50,24 @@ export class InjectionRegistrationService {
 
   async findByUserId(user: LoggedInUser) {
     try {
-      const res = await this.injectionRegistrationRepository.find({
-        where: { user_id: user?.user_id },
-        relations: { user: true, vaccination_site: true, vaccine: true },
-      });
+      const injectionRegistrationList =
+        await this.injectionRegistrationRepository.find({
+          where: { user_id: user?.user_id },
+          relations: { user: true, vaccination_site: true, vaccine: true },
+        });
 
-      const registerResult: RegisterResultDto[] = res
-        ?.filter((res) => res.status !== Status.PENDING)
-        .map((res) => {
-          return RegisterResultDto.fromDomain(res);
+      const registerResult: RegisterResultDto[] = injectionRegistrationList
+        ?.filter(
+          (injectionRegistrationList) =>
+            injectionRegistrationList.status !== Status.PENDING,
+        )
+        .map((injectionRegistrationList) => {
+          return RegisterResultDto.fromDomain(injectionRegistrationList);
         });
 
       return registerResult;
     } catch (err) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      throw new InternalServerErrorException();
     }
   }
 
@@ -69,26 +77,26 @@ export class InjectionRegistrationService {
         where: { injection_registration_id: user?.user_id },
       });
     } catch (err) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      throw new InternalServerErrorException();
     }
   }
 
   async create(
     createInjectionRegistrationDto: CreateInjectionRegistrationDto,
-    user,
+    user: LoggedInUser,
   ) {
-    // const status = Status.PENDING;
-
     try {
-      const newRegistration = await this.injectionRegistrationRepository.save({
-        user_id: user.user_id,
-        ...createInjectionRegistrationDto,
-        status: Status.PENDING,
-      });
+      const newRegistration = await this.injectionRegistrationRepository.insert(
+        {
+          user_id: user.user_id,
+          ...createInjectionRegistrationDto,
+          status: Status.PENDING,
+        },
+      );
 
       return newRegistration;
     } catch (err) {
-      throw new HttpException('Cannot create', HttpStatus.NOT_ACCEPTABLE);
+      throw new InternalServerErrorException();
     }
   }
 
@@ -117,10 +125,7 @@ export class InjectionRegistrationService {
         where: { injection_registration_id: id },
       });
     } catch (err) {
-      throw new HttpException(
-        'Cannot update',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -146,10 +151,7 @@ export class InjectionRegistrationService {
 
       return registerInfo;
     } catch (err) {
-      throw new HttpException(
-        'Cannot update',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException();
     }
   }
 

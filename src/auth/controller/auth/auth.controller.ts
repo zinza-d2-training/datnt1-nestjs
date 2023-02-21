@@ -11,6 +11,8 @@ import { AuthService } from 'auth/service/auth/auth.service';
 
 import { RegisterUserDto } from 'auth/dto/register-user.dto';
 import { LocalAuthGuard } from 'auth/guards/local-auth.guard';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
+import { User } from 'user/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +36,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('user-info')
-  async getUserInfo(@Request() request) {
-    return await this.authService.getUserInfo(request.user);
+  async getUserInfo(@User() user: LoggedInUser) {
+    return await this.authService.getUserInfo(user);
   }
 }

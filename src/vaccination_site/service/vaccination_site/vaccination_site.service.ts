@@ -16,63 +16,83 @@ export class VaccinationSiteService {
     private readonly vaccinationSiteRepository: Repository<VaccinationSite>,
   ) {}
 
+  private async getAllVaccinationSites() {
+    const VaccinationSites = await this.vaccinationSiteRepository.find({
+      relations: { ward: { district: { province: true } } },
+    });
+
+    return VaccinationSites.map((site) => {
+      return VaccinationSiteInfoDto.fromDomain(site);
+    });
+  }
+
+  private async getVaccinationSitesByProvinceId(province_id: number) {
+    const VaccinationSites = await this.vaccinationSiteRepository.find({
+      relations: { ward: { district: { province: true } } },
+      where: {
+        ward: {
+          district: {
+            province: { province_id: province_id },
+          },
+        },
+      },
+    });
+
+    return VaccinationSites.map((site) => {
+      return VaccinationSiteInfoDto.fromDomain(site);
+    });
+  }
+
+  private async getVaccinationSitesByDistrictId(district_id: number) {
+    const VaccinationSites = await this.vaccinationSiteRepository.find({
+      relations: { ward: { district: { province: true } } },
+      where: {
+        ward: {
+          district: {
+            district_id: district_id,
+          },
+        },
+      },
+    });
+
+    return VaccinationSites.map((site) => {
+      return VaccinationSiteInfoDto.fromDomain(site);
+    });
+  }
+
+  private async getVaccinationSitesByWardId(ward_id: number) {
+    const VaccinationSites = await this.vaccinationSiteRepository.find({
+      relations: { ward: { district: { province: true } } },
+      where: {
+        ward: {
+          ward_id: ward_id,
+        },
+      },
+    });
+
+    return VaccinationSites.map((site) => {
+      return VaccinationSiteInfoDto.fromDomain(site);
+    });
+  }
+
   async getVaccinationSites(searchFilter: SiteSearchFilterDto) {
     if (searchFilter.province_id === 'undefined') {
-      const result = await this.vaccinationSiteRepository.find({
-        relations: { ward: { district: { province: true } } },
-      });
-
-      return result.map((site) => {
-        return VaccinationSiteInfoDto.fromDomain(site);
-      });
+      return await this.getAllVaccinationSites();
     }
 
     if (searchFilter.district_id === 'undefined') {
-      const result: VaccinationSite[] =
-        await this.vaccinationSiteRepository.find({
-          relations: { ward: { district: { province: true } } },
-          where: {
-            ward: {
-              district: {
-                province: { province_id: +searchFilter.province_id },
-              },
-            },
-          },
-        });
-
-      return result.map((site) => {
-        return VaccinationSiteInfoDto.fromDomain(site);
-      });
+      return await this.getVaccinationSitesByProvinceId(
+        +searchFilter.province_id,
+      );
     }
 
-    if (searchFilter.ward_id !== 'undefined') {
-      const result: VaccinationSite[] =
-        await this.vaccinationSiteRepository.find({
-          relations: { ward: { district: { province: true } } },
-          where: {
-            ward: {
-              district: { district_id: +searchFilter.district_id },
-            },
-          },
-        });
-
-      return result.map((site) => {
-        return VaccinationSiteInfoDto.fromDomain(site);
-      });
+    if (searchFilter.ward_id === 'undefined') {
+      return await this.getVaccinationSitesByDistrictId(
+        +searchFilter.district_id,
+      );
     }
 
-    const result: VaccinationSite[] = await this.vaccinationSiteRepository.find(
-      {
-        relations: { ward: { district: { province: true } } },
-        where: {
-          ward: { ward_id: +searchFilter.ward_id },
-        },
-      },
-    );
-
-    return result.map((site) => {
-      return VaccinationSiteInfoDto.fromDomain(site);
-    });
+    return await this.getVaccinationSitesByWardId(+searchFilter.ward_id);
   }
 
   async createVaccinationSite(vaccinationSiteDto: VaccinationSiteDto) {

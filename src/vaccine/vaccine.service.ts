@@ -10,7 +10,6 @@ export class VaccineService {
   ) {}
 
   async findAll() {
-    const res = await this.vaccineRepository.find();
-    return res;
+    return await this.vaccineRepository.find();
   }
 }

@@ -8,13 +8,14 @@ import {
   Post,
   Put,
   UseGuards,
-  Request,
 } from '@nestjs/common';
+import { User } from './decorators/user.decorator';
 
 import { Roles } from 'auth/custom_decorators/role.decorator';
-import { RolesGuard } from 'auth/guards/roles.guard';
-import { Role } from 'auth/types/role.enum';
 import { JwtAuthGuard } from 'auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'auth/guards/roles.guard';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
+import { Role } from 'auth/types/role.enum';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
@@ -45,8 +46,13 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Put()
-  async updateUser(@Request() request, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.updateUser(request.user, updateUserDto);
+  async updateUser(
+    @User() user: LoggedInUser,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    console.log(updateUserDto);
+
+    return await this.userService.updateUser(user, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -56,7 +62,7 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return await this.userService.updateByUserId(request.user, updateUserDto);
+    return await this.userService.updateByUserId(id, updateUserDto);
   }
 
   @Delete(':id')

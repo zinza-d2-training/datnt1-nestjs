@@ -24,6 +24,8 @@ import { Role } from 'auth/types/role.enum';
 import { CreateInjectionRegistrationDto } from 'injection_registration/dto/create-injection-registration.dto';
 import { RegisterSearchFilterDto } from 'injection_registration/dto/register-search-filter.dto';
 import { InjectionRegistrationService } from 'injection_registration/service/injection_registration/injection_registration.service';
+import { User } from 'user/decorators/user.decorator';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 
 @Controller('injection-registration')
 export class InjectionRegistrationController {
@@ -41,8 +43,8 @@ export class InjectionRegistrationController {
   @Get('by-user')
   @Roles(Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  async findByUserId(@Request() request) {
-    return await this.injectionRegistrationService.findByUserId(request.user);
+  async findByUserId(@User() user: LoggedInUser) {
+    return await this.injectionRegistrationService.findByUserId(user);
   }
 
   @Get(':id/view-detail-by-admin')
@@ -59,11 +61,13 @@ export class InjectionRegistrationController {
   @Post()
   async create(
     @Body() createInjectionRegistrationDto: CreateInjectionRegistrationDto,
-    @Request() request,
+    @User() user: LoggedInUser,
   ) {
+    console.log(user);
+
     return await this.injectionRegistrationService.create(
       createInjectionRegistrationDto,
-      request.user,
+      user,
     );
   }
 
@@ -71,13 +75,13 @@ export class InjectionRegistrationController {
   @Roles(Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async updateInjectionRegistrationByUser(
-    @Request() request,
+    @User() user: LoggedInUser,
     @Param('id', ParseIntPipe) id: number,
     @Body()
     updateInjectionRegistrationDto: UpdateInjectionRegistrationByUserDto,
   ) {
     return await this.injectionRegistrationService.updateInjectionRegistrationByUser(
-      request.user,
+      user,
       id,
       updateInjectionRegistrationDto,
     );
@@ -95,12 +99,5 @@ export class InjectionRegistrationController {
       id,
       updateInjectionRegistrationDto,
     );
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.USER)
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.injectionRegistrationService.delete(id);
   }
 }

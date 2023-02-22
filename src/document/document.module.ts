@@ -8,13 +8,7 @@ import multer from 'multer';
 import path from 'path';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Document]),
-    // MulterModule.register({ dest: './upload' }),
-    // MulterModule.register({
-    //   storage: storage,
-    // }),
-  ],
+  imports: [TypeOrmModule.forFeature([Document])],
   controllers: [DocumentController],
   providers: [DocumentService],
 })

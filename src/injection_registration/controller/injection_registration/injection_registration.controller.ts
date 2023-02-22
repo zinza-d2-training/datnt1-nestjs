@@ -63,8 +63,6 @@ export class InjectionRegistrationController {
     @Body() createInjectionRegistrationDto: CreateInjectionRegistrationDto,
     @User() user: LoggedInUser,
   ) {
-    console.log(user);
-
     return await this.injectionRegistrationService.create(
       createInjectionRegistrationDto,
       user,

@@ -14,6 +14,7 @@ import { VaccinationSiteModule } from './vaccination_site/vaccination_site.modul
 import { PriorityGroupModule } from './priority_group/priority_group.module';
 import { InjectionRegistrationModule } from './injection_registration/injection_registration.module';
 import { VaccineModule } from './vaccine/vaccine.module';
+import { DocumentModule } from './document/document.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { VaccineModule } from './vaccine/vaccine.module';
     PriorityGroupModule,
     InjectionRegistrationModule,
     VaccineModule,
+    DocumentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

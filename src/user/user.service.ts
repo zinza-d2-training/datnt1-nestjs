@@ -54,8 +54,6 @@ export class UserService {
       relations: { ward: { district: { province: true } } },
     });
 
-    console.log(updatedUser);
-
     return UserInfoDto.fromDomain(updatedUser);
   }
 

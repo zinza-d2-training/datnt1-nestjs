@@ -1,3 +1,4 @@
+import { VaccinationSite } from './vaccination_site.entity';
 import {
   Column,
   Entity,
@@ -37,4 +38,7 @@ export class Ward {
 
   @OneToMany(() => User, (user) => user.ward)
   users: User[];
+
+  @OneToMany(() => VaccinationSite, (vaccinationSite) => vaccinationSite.ward)
+  vaccination_sites: VaccinationSite[];
 }

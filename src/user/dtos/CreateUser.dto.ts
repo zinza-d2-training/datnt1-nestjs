@@ -7,6 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { IsIdentityCardLength } from 'custom_validation_decorators/IsIdentityCardLength';
+import { IsOptional } from 'custom_validation_decorators/isOptional';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -37,4 +38,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsNumberString()
   ward_id: string;
+
+  @IsOptional()
+  @IsNumberString()
+  health_insurance_number: string;
 }

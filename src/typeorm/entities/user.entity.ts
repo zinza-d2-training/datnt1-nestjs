@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { InjectionRegistration } from './injection_registration.entity';
 import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 
@@ -18,6 +20,9 @@ export class User {
 
   @Column({ unique: true })
   identification_card: string;
+
+  @Column()
+  health_insurance_number: string;
 
   @Column({ unique: true })
   email: string;
@@ -62,4 +67,10 @@ export class User {
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;
+
+  @OneToMany(
+    () => InjectionRegistration,
+    (injection_registrations) => injection_registrations.user,
+  )
+  injection_registrations: InjectionRegistration[];
 }

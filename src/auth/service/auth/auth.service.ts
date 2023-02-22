@@ -9,6 +9,7 @@ import { comparePassword, encodePassword } from 'auth/bcrypt';
 import { RegisterUserDto } from 'auth/dto/register-user.dto';
 import { UserInfo } from 'auth/types/user-info.interface';
 import { User } from 'typeorm/entities/user.entity';
+import { UserInfoDto } from 'auth/dto/user-info.dto';
 
 @Injectable()
 export class AuthService {
@@ -80,11 +81,12 @@ export class AuthService {
   async getUserInfo(user: LoggedInUser) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userInfo } = await this.userRepository.findOne({
+      const userInfo = await this.userRepository.findOne({
         where: { user_id: user.user_id },
+        relations: { ward: { district: { province: true } } },
       });
 
-      return userInfo;
+      return UserInfoDto.fromDomain(userInfo);
     } catch (error) {
       throw new InternalServerErrorException('Internal Server Error', {
         cause: new Error(),

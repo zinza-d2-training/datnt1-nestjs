@@ -6,26 +6,24 @@ import {
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 
 import { Roles } from 'auth/custom_decorators/role.decorator';
 import { JwtAuthGuard } from 'auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'auth/guards/roles.guard';
+import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 import { Role } from 'auth/types/role.enum';
 import { CreateInjectionRegistrationDto } from 'injection_registration/dto/create-injection-registration.dto';
 import { RegisterSearchFilterDto } from 'injection_registration/dto/register-search-filter.dto';
 import { InjectionRegistrationService } from 'injection_registration/service/injection_registration/injection_registration.service';
 import { User } from 'user/decorators/user.decorator';
-import { LoggedInUser } from 'auth/types/logged-in-user.interface';
 
 @Controller('injection-registration')
 export class InjectionRegistrationController {
@@ -63,8 +61,6 @@ export class InjectionRegistrationController {
     @Body() createInjectionRegistrationDto: CreateInjectionRegistrationDto,
     @User() user: LoggedInUser,
   ) {
-    console.log(user);
-
     return await this.injectionRegistrationService.create(
       createInjectionRegistrationDto,
       user,

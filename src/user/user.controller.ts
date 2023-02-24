@@ -50,8 +50,6 @@ export class UserController {
     @User() user: LoggedInUser,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    console.log(updateUserDto);
-
     return await this.userService.updateUser(user, updateUserDto);
   }
 

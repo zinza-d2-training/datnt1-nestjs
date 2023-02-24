@@ -9,7 +9,9 @@ describe('InjectionRegistrationService', () => {
       providers: [InjectionRegistrationService],
     }).compile();
 
-    service = module.get<InjectionRegistrationService>(InjectionRegistrationService);
+    service = module.get<InjectionRegistrationService>(
+      InjectionRegistrationService,
+    );
   });
 
   it('should be defined', () => {

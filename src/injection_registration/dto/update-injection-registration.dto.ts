@@ -5,9 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
 
-import { CreateInjectionRegistrationDto } from './create-injection-registration.dto';
 import { IsOptional } from 'custom_validation_decorators/isOptional';
 import { Status } from 'injection_registration/types/status.enum';
 

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/';
 import { HttpStatus } from '@nestjs/common/enums';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -86,13 +82,17 @@ export class InjectionRegistrationService {
     user: LoggedInUser,
   ) {
     try {
-      const newRegistration = await this.injectionRegistrationRepository.insert(
-        {
-          user_id: user.user_id,
-          ...createInjectionRegistrationDto,
-          status: Status.PENDING,
-        },
-      );
+      await this.injectionRegistrationRepository.insert({
+        user_id: user.user_id,
+        ...createInjectionRegistrationDto,
+        status: Status.PENDING,
+      });
+
+      const newRegistration =
+        await this.injectionRegistrationRepository.findOne({
+          where: { user_id: user.user_id },
+          order: { create_at: 'DESC' },
+        });
 
       return newRegistration;
     } catch (err) {

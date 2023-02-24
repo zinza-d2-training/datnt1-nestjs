@@ -9,7 +9,9 @@ describe('InjectionRegistrationController', () => {
       controllers: [InjectionRegistrationController],
     }).compile();
 
-    controller = module.get<InjectionRegistrationController>(InjectionRegistrationController);
+    controller = module.get<InjectionRegistrationController>(
+      InjectionRegistrationController,
+    );
   });
 
   it('should be defined', () => {

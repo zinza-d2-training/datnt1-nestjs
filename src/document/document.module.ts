@@ -1,11 +1,8 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { DocumentService } from './document.service';
-import { DocumentController } from './document.controller';
-import { MulterModule } from '@nestjs/platform-express';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Document } from 'typeorm/entities/document.entity';
-import multer from 'multer';
-import path from 'path';
+import { DocumentController } from './document.controller';
+import { DocumentService } from './document.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Document])],

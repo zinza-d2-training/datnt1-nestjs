@@ -50,6 +50,8 @@ export class DocumentController {
     return this.documentService.uploadFile(file, name);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('upload/multiple')
   @UseInterceptors(
     FilesInterceptor('files', 20, {
